@@ -17,11 +17,15 @@ what do i need?
 spotify : https://api.spotify.com/v1/search?query=thriller&type=track&market=US&offset=0&limit=1
 
 
+
+
+
 */
 
 const keys = require("./keys");
 const spotify = require("spotify");
 const Twitter = require("twitter");
+const request = require("request");
 
 var client = new Twitter({
   consumer_key: keys.twitterKeys.consumer_key,
@@ -43,16 +47,70 @@ function myTweet(){
 	});
 };
 
-// function spotify(){}
-query = process.argv[2];
+function NameThatTrack(){
+	var track = process.argv.slice(2);
+	
+	track.forEach(function(e, i){
+		track[i] = e.replace(/\s/,"+");
+	});
 
-spotify.search({ type: 'track', query: query }, function(err, data) {
-    if ( err ) {
-        console.log('Error occurred: ' + err);
-        return;
-    }
- 	console.log(data)
-    // Do something with 'data' 
+	track = track.join('+');
+
+
+	// var track = typeof track  !== 'undefined' ?  track  : "emotions";
+/*PROBLEMS
+1) NEED TO FIGURE OUT SLICE DEFAULT
+2) HOW TO FIND ACE OF BASE SONG? 
+*/
+
+	spotify.search({ type: 'track', query: track }, function(err, data) {
+	    if ( err ) {
+	        console.log('Error occurred: ' + err);
+	        return;
+	    }
+	 	console.log("Here is what I've found...");
+	 	console.log("==============================================")
+	 	console.log("");
+	 	console.log("Artist: " + data.tracks.items[0].artists[0].name);
+	 	console.log("");
+	 	console.log("Track: " + data.tracks.items[0].name);
+	 	console.log("");
+	 	console.log("Preview: " + data.tracks.items[0].preview_url);
+	 	console.log("");
+	 	console.log("Album: " + data.tracks.items[0].album.name);
+	 	console.log("")
+	 	console.log("==============================================")
+
+	});
+};
+
+
+// function movie(){}
+/*PROBLEMS
+1) NEED THE JSON RESPONSE TO PUNCH IT OUT
+2) MAYBE NEED TO USE A DIFFERENT API 
+*/
+var movieName = process.argv.slice(2);
+	
+	movieName.forEach(function(e, i){
+		movieName[i] = e.replace(/\s/,"+");
+	});
+
+	movieName = movieName.join('+');
+
+
+	var queryUrl = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&r=json";
+request(queryUrl, function(error, response, body) {
+
+
+if (!error && response.statusCode === 200) {
+	console.log(queryUrl);
+	console.log(JSON.parse(body));
+
+}
 });
+
+
+
 
 
