@@ -43,6 +43,16 @@ function myTweet(){
 	});
 };
 
+// function spotify(){}
+query = process.argv[2];
 
+spotify.search({ type: 'track', query: query }, function(err, data) {
+    if ( err ) {
+        console.log('Error occurred: ' + err);
+        return;
+    }
+ 	console.log(data)
+    // Do something with 'data' 
+});
 
 
