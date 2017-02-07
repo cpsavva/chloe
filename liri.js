@@ -85,7 +85,7 @@ function NameThatTrack(){
 };
 
 
-// function movie(){}
+function movie(){
 /*PROBLEMS
 1) NEED THE JSON RESPONSE TO PUNCH IT OUT
 2) MAYBE NEED TO USE A DIFFERENT API 
@@ -100,15 +100,35 @@ var movieName = process.argv.slice(2);
 
 
 	var queryUrl = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&r=json";
-request(queryUrl, function(error, response, body) {
+	request(queryUrl, function(error, response, body) {
 
 
-if (!error && response.statusCode === 200) {
-	console.log(queryUrl);
-	console.log(JSON.parse(body));
+		if (!error && response.statusCode === 200) {
+			// console.log(queryUrl);
+			// console.log(JSON.parse(body));
+			console.log("Here is what I've found...");
+			console.log("==============================================")
+			console.log("");
+			console.log("Title: " + JSON.parse(body).Title);
+			console.log("");
+			console.log("Year: "+ JSON.parse(body).Year);
+			console.log("");
+			console.log("IMDb Rating: "+ JSON.parse(body).imdbRating);
+			console.log("");
+			console.log("Country: " + JSON.parse(body).Country);
+			console.log("");
+			console.log("Language: " + JSON.parse(body).Language);
+			console.log("");
+			console.log("Actors: " + JSON.parse(body).Actors); 
+			console.log("");
+			console.log("Plot: " + JSON.parse(body).Plot);
+			console.log("");
+			console.log("==============================================")
 
-}
-});
+		}
+	});
+
+};
 
 
 
