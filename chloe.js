@@ -1,23 +1,4 @@
 
-//pseudocoding
-/*first i want to run liri.js and 1st question will pop up?
-How can I help? with three options:
-1) my tweets
-2) spotify this song
-3) movie info
-
-when the person selects the my tweets run mytweets ();
-when the person selects spotify this song, prompt them to enter song title 
-	then run spotify();(might need to reverse this ie run spotify then prompt)
-when the person selects movie info, prompt them to enter movie title
-	then run movie title (might need to reverse this ie run movie then prompt)
-
-
-what do i need?
-spotify : https://api.spotify.com/v1/search?query=thriller&type=track&market=US&offset=0&limit=1
-
-*/
-
 const keys = require("./keys");
 const spotify = require("spotify");
 const Twitter = require("twitter");
@@ -32,6 +13,9 @@ var client = new Twitter({
   access_token_key: keys.twitterKeys.access_token_key,
   access_token_secret: keys.twitterKeys.access_token_secret
 });
+
+/* ========================================================
+FUNCTIONS  */
 
 
 function myTweet(){
@@ -125,9 +109,48 @@ function movie(movieName){
 
 		});
 };
+function otherMovie(movieName){
+		var queryUrl = "https://api.themoviedb.org/3/search/movie?api_key=f8e3a097cdcfbc790948cc7efc43982f&language=en-US&query=" + 
+						movieName + "&page=1&include_adult=false";
+	request(queryUrl, function(error, response, body) {
+
+
+		if (!error && response.statusCode === 200) {
+			console.log(queryUrl);
+			console.log(JSON.parse(body));
+			console.log("Here is what I've found...");
+			console.log("==============================================")
+			console.log("");
+			console.log("Title: " + JSON.parse(body).results[0].title);
+			console.log("");
+			console.log("release Date: "+ JSON.parse(body).results[0].release_date);
+			console.log("");
+			console.log("Language: " + JSON.parse(body).results[0].original_language);
+			console.log("");
+			console.log("Plot: " + JSON.parse(body).results[0].overview);
+			console.log("");
+			console.log("==============================================")
+
+			}
+
+		});
+}
 
 function doWhatever(){
+	fs.readFile("random.txt", "utf8", function(error, data) {
 
+  
+  console.log(data);
+
+  var data_array = data.split(",");
+  console.log(data_array);
+  var songName = data_array[1];
+
+  if(data_array[0] === "spotify track info"){
+  	nameThatTrack(songName)
+  }
+
+  });
 
 }
 /* =================================================================
@@ -142,8 +165,8 @@ inquirer.prompt([
 		name: "services"
 	}
 ]).then(function(user){
-	console.log(JSON.stringify(user));
-	console.log(user.services)
+	// console.log(JSON.stringify(user));
+	// console.log(user.services)
 //use switch maybe
 	if (user.services == "check my tweets"){
 		myTweet();
@@ -171,9 +194,12 @@ inquirer.prompt([
 			console.log(JSON.stringify(movieInfo, null, 2));
 			console.log(movieInfo.film);
 			var film = movieInfo.film;
-			movie(film);
+			otherMovie(film);
 		});
 	};//if
+	if (user.services == "do what it says"){
+		doWhatever();
+	}//if
 });
 
 
