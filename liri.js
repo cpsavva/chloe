@@ -1,6 +1,6 @@
 
 //pseudocoding
-/*first i want to run liri.js and i question will pop up?
+/*first i want to run liri.js and 1st question will pop up?
 How can I help? with three options:
 1) my tweets
 2) spotify this song
@@ -16,16 +16,15 @@ when the person selects movie info, prompt them to enter movie title
 what do i need?
 spotify : https://api.spotify.com/v1/search?query=thriller&type=track&market=US&offset=0&limit=1
 
-
-
-
-
 */
 
 const keys = require("./keys");
 const spotify = require("spotify");
 const Twitter = require("twitter");
 const request = require("request");
+const fs = require("fs");
+const inquirer = require("inquirer");
+
 
 var client = new Twitter({
   consumer_key: keys.twitterKeys.consumer_key,
@@ -46,22 +45,19 @@ function myTweet(){
 
 	});
 };
-
-function NameThatTrack(){
-	var track = process.argv.slice(2);
-	
-	track.forEach(function(e, i){
-		track[i] = e.replace(/\s/,"+");
-	});
-
-	track = track.join('+');
-
-
-	// var track = typeof track  !== 'undefined' ?  track  : "emotions";
-/*PROBLEMS
-1) NEED TO FIGURE OUT SLICE DEFAULT
-2) HOW TO FIND ACE OF BASE SONG? 
-*/
+var track;
+function nameThatTrack(track){
+	// // var track = process.argv.slice(2);
+	// console.log(track)
+	// track.forEach(function(e, i){
+	// 	track[i] = e.replace(/\s/,"+");
+	// });
+	// console.log(track)
+	// track = track.join('+');
+	// console.log(track)
+	// if (track.length == 0){
+	// 	track= "the+sign"
+	// }
 
 	spotify.search({ type: 'track', query: track }, function(err, data) {
 	    if ( err ) {
@@ -85,18 +81,18 @@ function NameThatTrack(){
 };
 
 
-function movie(){
-/*PROBLEMS
-1) NEED THE JSON RESPONSE TO PUNCH IT OUT
-2) MAYBE NEED TO USE A DIFFERENT API 
-*/
-var movieName = process.argv.slice(2);
-	
-	movieName.forEach(function(e, i){
-		movieName[i] = e.replace(/\s/,"+");
-	});
+function movie(movieName){
 
-	movieName = movieName.join('+');
+	// var movieName = process.argv.slice(2);
+	
+	// movieName.forEach(function(e, i){
+	// 	movieName[i] = e.replace(/\s/,"+");
+	// });
+
+	// movieName = movieName.join('+');
+	// if (movieName.length == 0){
+	// 	movieNAme = "mr nobody"
+	// };
 
 
 	var queryUrl = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&r=json";
@@ -105,7 +101,7 @@ var movieName = process.argv.slice(2);
 
 		if (!error && response.statusCode === 200) {
 			// console.log(queryUrl);
-			// console.log(JSON.parse(body));
+			console.log(JSON.parse(body));
 			console.log("Here is what I've found...");
 			console.log("==============================================")
 			console.log("");
@@ -125,12 +121,60 @@ var movieName = process.argv.slice(2);
 			console.log("");
 			console.log("==============================================")
 
-		}
-	});
+			}
 
+		});
 };
 
+function doWhatever(){
 
+
+}
+/* =================================================================
+main process */
+
+
+inquirer.prompt([
+	{
+		type: "checkbox",
+		message: "Hello, How can I help you today?",
+		choices: ["check my tweets", "spotify track info", "movie info", "do what it says"],
+		name: "services"
+	}
+]).then(function(user){
+	console.log(JSON.stringify(user));
+	console.log(user.services)
+//use switch maybe
+	if (user.services == "check my tweets"){
+		myTweet();
+	}//if
+	if (user.services == "spotify track info"){
+		inquirer.prompt([
+			{
+		type: "input",
+		message: "Please type in your track",
+		name: "song"
+		}]).then(function(trackName){
+			console.log(JSON.stringify(trackName, null, 2));
+			console.log(trackName.song);
+			var song = trackName.song;
+			nameThatTrack(song);
+		});
+	}//if
+	if(user.services == "movie info"){
+		inquirer.prompt([
+			{
+		type: "input",
+		message: "Please type in movie title",
+		name: "film"
+		}]).then(function(movieInfo){
+			console.log(JSON.stringify(movieInfo, null, 2));
+			console.log(movieInfo.film);
+			var film = movieInfo.film;
+			movie(film);
+		});
+	};//if
+});
 
 
 
