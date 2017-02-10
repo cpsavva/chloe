@@ -1,3 +1,10 @@
+/*problems/things left to do:
+2) do what it says   
+3) update ReadMe
+*/
+
+
+
 
 const keys = require("./keys");
 const spotify = require("spotify");
@@ -42,7 +49,9 @@ function nameThatTrack(track){
 	// if (track.length == 0){
 	// 	track= "the+sign"
 	// }
-
+	if (track === ""){
+		track = "the sign"
+	};
 	spotify.search({ type: 'track', query: track }, function(err, data) {
 	    if ( err ) {
 	        console.log('Error occurred: ' + err);
@@ -74,10 +83,10 @@ function movie(movieName){
 	// });
 
 	// movieName = movieName.join('+');
-	// if (movieName.length == 0){
-	// 	movieNAme = "mr nobody"
-	// };
-
+	if (movieName === " "){
+		movieName = "mr nobody"
+	};
+	
 
 	var queryUrl = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&r=json";
 	request(queryUrl, function(error, response, body) {
@@ -110,6 +119,9 @@ function movie(movieName){
 		});
 };
 function otherMovie(movieName){
+	if (movieName === ""){
+		movieName = "mr nobody"
+	};
 		var queryUrl = "https://api.themoviedb.org/3/search/movie?api_key=f8e3a097cdcfbc790948cc7efc43982f&language=en-US&query=" + 
 						movieName + "&page=1&include_adult=false";
 	request(queryUrl, function(error, response, body) {
