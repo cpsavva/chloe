@@ -30,7 +30,10 @@ function myTweet(){
 	client.get('statuses/user_timeline', params, function(error, tweets, response) {
 	  if (!error) {
 	  	for (i = 0; i< tweets.length; i++){
+	  	console.log("")
 	    console.log(tweets[i].text);
+	    console.log("");
+	    console.log("===========================================")
 		}  	
 	  }
 
@@ -50,7 +53,7 @@ function nameThatTrack(track){
 	// 	track= "the+sign"
 	// }
 	if (track === ""){
-		track = "the sign"
+		track = "the sign ace of base"
 	};
 	spotify.search({ type: 'track', query: track }, function(err, data) {
 	    if ( err ) {
@@ -160,7 +163,7 @@ function doWhatever(){
 
   if(data_array[0] === "spotify track info"){
   	nameThatTrack(songName)
-  }
+  }	
 
   });
 
@@ -168,6 +171,50 @@ function doWhatever(){
 /* =================================================================
 main process */
 
+
+// inquirer.prompt([
+// 	{
+// 		type: "checkbox",
+// 		message: "Hello, How can I help you today?",
+// 		choices: ["check my tweets", "spotify track info", "movie info", "do what it says"],
+// 		name: "services"
+// 	}
+// ]).then(function(user){
+// 	// console.log(JSON.stringify(user));
+// 	// console.log(user.services)
+// 	if (user.services == "check my tweets"){
+// 		myTweet();
+// 	}//if
+// 	if (user.services == "spotify track info"){
+// 		inquirer.prompt([
+// 			{
+// 		type: "input",
+// 		message: "Please type in your track",
+// 		name: "song"
+// 		}]).then(function(trackName){
+// 			console.log(JSON.stringify(trackName, null, 2));
+// 			console.log(trackName.song);
+// 			var song = trackName.song;
+// 			nameThatTrack(song);
+// 		});
+// 	}//if
+// 	if(user.services == "movie info"){
+// 		inquirer.prompt([
+// 			{
+// 		type: "input",
+// 		message: "Please type in movie title",
+// 		name: "film"
+// 		}]).then(function(movieInfo){
+// 			console.log(JSON.stringify(movieInfo, null, 2));
+// 			console.log(movieInfo.film);
+// 			var film = movieInfo.film;
+// 			otherMovie(film);
+// 		});
+// 	};//if
+// 	if (user.services == "do what it says"){
+// 		doWhatever();
+// 	}//if
+// });
 
 inquirer.prompt([
 	{
@@ -177,41 +224,55 @@ inquirer.prompt([
 		name: "services"
 	}
 ]).then(function(user){
-	// console.log(JSON.stringify(user));
-	// console.log(user.services)
-//use switch maybe
-	if (user.services == "check my tweets"){
-		myTweet();
-	}//if
-	if (user.services == "spotify track info"){
-		inquirer.prompt([
-			{
-		type: "input",
-		message: "Please type in your track",
-		name: "song"
-		}]).then(function(trackName){
-			console.log(JSON.stringify(trackName, null, 2));
-			console.log(trackName.song);
-			var song = trackName.song;
-			nameThatTrack(song);
-		});
-	}//if
-	if(user.services == "movie info"){
-		inquirer.prompt([
-			{
-		type: "input",
-		message: "Please type in movie title",
-		name: "film"
-		}]).then(function(movieInfo){
-			console.log(JSON.stringify(movieInfo, null, 2));
-			console.log(movieInfo.film);
-			var film = movieInfo.film;
-			otherMovie(film);
-		});
-	};//if
-	if (user.services == "do what it says"){
-		doWhatever();
-	}//if
+//if I do options = user.services[0] and case user.services[0]
+// need to find a way to extract the choice out of its array  is this even possible?
+
+	var options = user.services;
+	console.log(options);//return ['whichever choice got picked']
+
+
+	switch (options[0]){
+
+		case "check my tweets":
+			myTweet();
+			break;
+
+		case "spotify track info":
+			inquirer.prompt([
+				{
+					type: "input",
+					message: "Please type in your track",
+					name: "song"
+				}]).then(function(trackName){
+					console.log(JSON.stringify(trackName, null, 2));
+					console.log(trackName.song);
+					var song = trackName.song;
+					nameThatTrack(song);
+				});
+			break;
+
+		case "movie info":
+			inquirer.prompt([
+				{
+					type: "input",
+					message: "Please type in movie title",
+					name: "film"
+				}]).then(function(movieInfo){
+					console.log(JSON.stringify(movieInfo, null, 2));
+					console.log(movieInfo.film);
+					var film = movieInfo.film;
+					otherMovie(film);
+				});
+			break;
+
+		case "do what it says":
+			doWhatever();
+			break;
+
+		default: 
+			console.log("I'm sorry. Please try again.");
+	}
+
 });
 
 

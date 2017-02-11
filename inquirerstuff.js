@@ -8,35 +8,39 @@ inquirer.prompt([
 		name: "services"
 	}
 ]).then(function(user){
-	console.log(JSON.stringify(user, null, 2));
-//use switch maybe
-	if (user.services === "check my tweets"){
-		mytweets();
-	}//if
-	if (user.services === "spotify track info"){
-		inquirer.prompt([
+	var options = user.services
+	switch (options){
+		case "check my tweets":
+			myTweet();
+
+		case "spotify track info":
+			inquirer.prompt([
 			{
-		type: "input",
-		message: "Please type in your track",
-		name: "song"
-		}]).then(function(trackName){
-			console.log(JSON.stringify(trackName, null, 2));
-			console.log(trackName.song);
-			var song = trackName.song;
-			nameThatTrack(song);
-		});
-	}//if
-	if(user.serveices === "movie info"){
-		inquirer.prompt([
+				type: "input",
+				message: "Please type in your track",
+				name: "song"
+			}]).then(function(trackName){
+				console.log(JSON.stringify(trackName, null, 2));
+				console.log(trackName.song);
+				var song = trackName.song;
+				nameThatTrack(song);
+			});
+
+		case "movie info":
+			inquirer.prompt([
 			{
-		type: "input",
-		message: "Please type in movie title",
-		name: "film"
-		}]).then(function(movieInfo){
-			console.log(JSON.stringify(movieInfo, null, 2));
-			console.log(movieInfo.film);
-			var film = movieInfo.film;
-			movie(film);
-		});
-	}//if
-}
+				type: "input",
+				message: "Please type in movie title",
+				name: "film"
+			}]).then(function(movieInfo){
+				console.log(JSON.stringify(movieInfo, null, 2));
+				console.log(movieInfo.film);
+				var film = movieInfo.film;
+				otherMovie(film);
+			});
+
+		case "do what it says":
+			doWhatever();
+	}
+
+});
