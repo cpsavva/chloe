@@ -7,7 +7,9 @@ exports.twitterKeys = {
   access_token_secret: 'taOd0htTfLtVCGd8YLw8M4jG9C8TFAoyCLqZSBBEUe7LO',
 }
 
-
+exports.movieKeys = {
+	tmdb: "f8e3a097cdcfbc790948cc7efc43982f"
+}
 
 
 
